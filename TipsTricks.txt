@@ -1,0 +1,49 @@
+Maui - SQLite
+Annan plattform - LocalDB
+
+
+Customers
+Users
+Services
+StatusTypes
+Projects
+
+Steg 1. 
+Class Library - Project name "Data", Solution name "DataStorage_Assignment"
+
+Steg 2. 
+Katalog - databases
+
+Rekommenderar att använda localdb - starta en data connection ".... Database file"
+
+Steg 3. 
+Entities
+
+Entiteter är det som kommer från diagrammet
+
+Skapa katalog - Entities 
+Skapa filerna
+
+Steg 4. 
+Installera 
+Install-Package Microsoft.EntityFrameworkCore.SqlServer | Tools | Design
+
+Steg 5. 
+Context
+DataContext - DbContext
+Registrera entiteterna 
+Ex. public DbSet<CustomerEntity> Customer { get; set; }
+
+DataContextFactory (Se 23:14 i video https://www.youtube.com/watch?v=YBT4_SNxBQQ)
+
+
+Steg 6. 
+Add-Migration "..."
+
+Update-Database
+
+Steg 7. 
+Skapa Repositories
+
+CRUD - Create, read, update, delete
+
