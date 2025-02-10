@@ -7,6 +7,8 @@ public class ProjectEntity
 {
     [Key]
     public int Id { get; set; }
+
+    [Column(TypeName = "nvarchar(150)")]
     public string Title { get; set; } = null!;
     public string? Description { get; set; }
     public DateOnly StartDate { get; set; }

@@ -17,6 +17,75 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //Tillfällig data för att visa att det fungerar
+        modelBuilder.Entity<CustomerEntity>().HasData(
+            new CustomerEntity
+            {
+                Id = 1,
+                CustomerName = "Kalle",
+                Email = "kalle@domain.com",
+                Phone = "070-1234567"
+            },
+            new CustomerEntity
+            {
+                Id = 2,
+                CustomerName = "KodKompisarna AB",
+                Email = "kodkompisarna@domain.com",
+                Phone = "070-2345678"
+            },
+            new CustomerEntity
+            {
+                Id = 3,
+                CustomerName = "Anna Svensson",
+                Email = "anna@domain.com",
+                Phone = "070-3456789"
+            }
+        );
+
+        //Tillfällig data för att visa att det fungerar
+        modelBuilder.Entity<ProjectEntity>().HasData(
+            new ProjectEntity
+            {
+                Id = 1,
+                Title = "KodKompisarna",
+                Description = "KodKompisarna ska bygga en hemsida",
+                StartDate = new DateOnly(2022, 01, 01),
+                EndDate = new DateOnly(2022, 12, 31),
+                TotalPrice = 10000,
+                ProjectManagerId = 1,
+                CustomerId = 2,
+                ServiceId = 1,
+                StatusTypeId = 1
+            },
+            new ProjectEntity
+            {
+                Id = 2,
+                Title = "Webbdesign för Anna",
+                Description = "Skapa en modern portfolio för Anna Svensson",
+                StartDate = new DateOnly(2023, 03, 01),
+                EndDate = new DateOnly(2023, 08, 31),
+                TotalPrice = 5000,
+                ProjectManagerId = 1,
+                CustomerId = 3,
+                ServiceId = 1,
+                StatusTypeId = 2
+            }
+
+        );
+
+        //Tillfällig data för att visa att det fungerar
+        modelBuilder.Entity<ProjectManagerEntity>().HasData(
+            new ProjectManagerEntity
+            {
+                Id = 1,
+                FirstName = "Kalle",
+                LastName = "Karlsson",
+                Email = "kalle.karlsson@domain.com",
+                Phone = "071-1234567"
+            }
+
+        );
+
         // Lägger till data vid skapande av database
         modelBuilder.Entity<StatusTypeEntity>().HasData(
             new StatusTypeEntity
@@ -35,6 +104,30 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
                 StatusName = "Completed! WIHO!",
             }
         );
+
+
+       
+        
+        
+        
+        //Tillfällig data för att visa att det fungerar
+        modelBuilder.Entity<ServiceEntity>().HasData(
+            new ServiceEntity
+            {
+                Id = 1,
+                ServiceName = "Webbdesign",
+                Price = 10000
+            },
+            new ServiceEntity
+            {
+                Id = 2,
+                ServiceName = "SEO-optimering",
+                Price = 5000
+            }
+
+        );
+
+
     }
 
 
