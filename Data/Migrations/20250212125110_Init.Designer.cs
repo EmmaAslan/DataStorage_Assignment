@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250210100813_Init")]
+    [Migration("20250212125110_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -47,6 +47,29 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerName = "Kalle",
+                            Email = "kalle@domain.com",
+                            Phone = "070-1234567"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CustomerName = "KodKompisarna AB",
+                            Email = "kodkompisarna@domain.com",
+                            Phone = "070-2345678"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CustomerName = "Anna Svensson",
+                            Email = "anna@domain.com",
+                            Phone = "070-3456789"
+                        });
                 });
 
             modelBuilder.Entity("Data.Entities.ProjectEntity", b =>
@@ -96,6 +119,34 @@ namespace Data.Migrations
                     b.HasIndex("StatusTypeId");
 
                     b.ToTable("Projects");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerId = 2,
+                            Description = "KodKompisarna ska bygga en hemsida",
+                            EndDate = new DateOnly(2022, 12, 31),
+                            ProjectManagerId = 1,
+                            ServiceId = 1,
+                            StartDate = new DateOnly(2022, 1, 1),
+                            StatusTypeId = 1,
+                            Title = "KodKompisarna",
+                            TotalPrice = 10000m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CustomerId = 3,
+                            Description = "Skapa en modern portfolio för Anna Svensson",
+                            EndDate = new DateOnly(2023, 8, 31),
+                            ProjectManagerId = 1,
+                            ServiceId = 1,
+                            StartDate = new DateOnly(2023, 3, 1),
+                            StatusTypeId = 2,
+                            Title = "Webbdesign för Anna",
+                            TotalPrice = 5000m
+                        });
                 });
 
             modelBuilder.Entity("Data.Entities.ProjectManagerEntity", b =>
@@ -124,6 +175,16 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProjectManagers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "kalle.karlsson@domain.com",
+                            FirstName = "Kalle",
+                            LastName = "Karlsson",
+                            Phone = "071-1234567"
+                        });
                 });
 
             modelBuilder.Entity("Data.Entities.ServiceEntity", b =>
@@ -144,6 +205,20 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Services");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Price = 10000,
+                            ServiceName = "Webbdesign"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Price = 5000,
+                            ServiceName = "SEO-optimering"
+                        });
                 });
 
             modelBuilder.Entity("Data.Entities.StatusTypeEntity", b =>
@@ -183,19 +258,19 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.ProjectEntity", b =>
                 {
                     b.HasOne("Data.Entities.CustomerEntity", "Customer")
-                        .WithMany()
+                        .WithMany("Projects")
                         .HasForeignKey("CustomerId");
 
                     b.HasOne("Data.Entities.ProjectManagerEntity", "ProjectManager")
-                        .WithMany()
+                        .WithMany("Projects")
                         .HasForeignKey("ProjectManagerId");
 
                     b.HasOne("Data.Entities.ServiceEntity", "Service")
-                        .WithMany()
+                        .WithMany("Projects")
                         .HasForeignKey("ServiceId");
 
                     b.HasOne("Data.Entities.StatusTypeEntity", "StatusType")
-                        .WithMany()
+                        .WithMany("Projects")
                         .HasForeignKey("StatusTypeId");
 
                     b.Navigation("Customer");
@@ -205,6 +280,26 @@ namespace Data.Migrations
                     b.Navigation("Service");
 
                     b.Navigation("StatusType");
+                });
+
+            modelBuilder.Entity("Data.Entities.CustomerEntity", b =>
+                {
+                    b.Navigation("Projects");
+                });
+
+            modelBuilder.Entity("Data.Entities.ProjectManagerEntity", b =>
+                {
+                    b.Navigation("Projects");
+                });
+
+            modelBuilder.Entity("Data.Entities.ServiceEntity", b =>
+                {
+                    b.Navigation("Projects");
+                });
+
+            modelBuilder.Entity("Data.Entities.StatusTypeEntity", b =>
+                {
+                    b.Navigation("Projects");
                 });
 #pragma warning restore 612, 618
         }

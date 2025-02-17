@@ -17,14 +17,34 @@ public static class ProjectManagerFactory
         };
     }
 
+
+   
     public static ProjectManagerModel CreateProjectManager(ProjectManagerEntity entity)
     {
+        // Får null när jag skapar Project
+        if (entity == null)
+            return null!;
+
         return new ProjectManagerModel
         {
+            Id = entity.Id,
             FirstName = entity.FirstName,
             LastName = entity.LastName,
             Email = entity.Email,
             Phone = entity.Phone
+        };
+        
+    }
+
+    public static ProjectManagerEntity CreateProjectManager(ProjectManagerModel model)
+    {
+        return new ProjectManagerEntity
+        {
+            Id = model.Id,
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+            Email = model.Email,
+            Phone = model.Phone
         };
     }
 }

@@ -17,4 +17,6 @@ public class ProjectManagerEntity
     [Column(TypeName = "varchar(150)")]
     public string Email { get; set; } = null!;
     public string? Phone { get; set; }
+
+    public IEnumerable<ProjectEntity>? Projects { get; set; }
 }

@@ -10,4 +10,6 @@ public class StatusTypeEntity
 
     [Column(TypeName = "nvarchar(50)")]
     public string StatusName { get; set; } = null!;
+
+    public IEnumerable<ProjectEntity>? Projects { get; set; }
 }

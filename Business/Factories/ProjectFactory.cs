@@ -30,6 +30,7 @@ public static class ProjectFactory
     {
         return new ProjectModel
         {
+            Id = entity.Id,
             Title = entity.Title,
             Description = entity.Description,
             StartDate = entity.StartDate,
@@ -42,4 +43,21 @@ public static class ProjectFactory
         };
     }
 
+    public static ProjectEntity CreateProject(ProjectModel model)
+    {
+        return new ProjectEntity
+        {
+            Id = model.Id,
+            Title = model.Title,
+            Description = model.Description,
+            StartDate = model.StartDate,
+            EndDate = model.EndDate,
+            TotalPrice = model.TotalPrice,
+            ProjectManager = ProjectManagerFactory.CreateProjectManager(model.ProjectManager),
+            Customer = CustomerFactory.CreateCustomer(model.Customer),
+            Service = ServiceFactory.CreateService(model.Service),
+            StatusType = StatusTypeFactory.CreateStatusType(model.StatusType)
+            
+        };
+    }
 }

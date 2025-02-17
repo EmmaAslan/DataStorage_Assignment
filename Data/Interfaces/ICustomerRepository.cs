@@ -6,7 +6,7 @@ namespace Data.Interfaces
     public interface ICustomerRepository
     {
         Task<CustomerEntity> CreateAsync(CustomerEntity entity);
-        Task DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id);
         Task<IEnumerable<CustomerEntity>> GetAllAsync();
         Task<CustomerEntity> GetByAnyAsync(Expression<Func<CustomerEntity, bool>> expression);
         Task<CustomerEntity> GetByIdAsync(int id);

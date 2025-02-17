@@ -113,6 +113,30 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Customers",
+                columns: new[] { "Id", "CustomerName", "Email", "Phone" },
+                values: new object[,]
+                {
+                    { 1, "Kalle", "kalle@domain.com", "070-1234567" },
+                    { 2, "KodKompisarna AB", "kodkompisarna@domain.com", "070-2345678" },
+                    { 3, "Anna Svensson", "anna@domain.com", "070-3456789" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProjectManagers",
+                columns: new[] { "Id", "Email", "FirstName", "LastName", "Phone" },
+                values: new object[] { 1, "kalle.karlsson@domain.com", "Kalle", "Karlsson", "071-1234567" });
+
+            migrationBuilder.InsertData(
+                table: "Services",
+                columns: new[] { "Id", "Price", "ServiceName" },
+                values: new object[,]
+                {
+                    { 1, 10000, "Webbdesign" },
+                    { 2, 5000, "SEO-optimering" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "StatusTypes",
                 columns: new[] { "Id", "StatusName" },
                 values: new object[,]
@@ -120,6 +144,15 @@ namespace Data.Migrations
                     { 1, "Not Started" },
                     { 2, "Ongoing" },
                     { 3, "Completed! WIHO!" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Projects",
+                columns: new[] { "Id", "CustomerId", "Description", "EndDate", "ProjectManagerId", "ServiceId", "StartDate", "StatusTypeId", "Title", "TotalPrice" },
+                values: new object[,]
+                {
+                    { 1, 2, "KodKompisarna ska bygga en hemsida", new DateOnly(2022, 12, 31), 1, 1, new DateOnly(2022, 1, 1), 1, "KodKompisarna", 10000m },
+                    { 2, 3, "Skapa en modern portfolio för Anna Svensson", new DateOnly(2023, 8, 31), 1, 1, new DateOnly(2023, 3, 1), 2, "Webbdesign för Anna", 5000m }
                 });
 
             migrationBuilder.CreateIndex(

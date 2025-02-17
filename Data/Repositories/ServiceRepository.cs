@@ -44,19 +44,29 @@ public class ServiceRepository(DataContext context) : IServiceRepository
         return entity;
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
+        // Find the entity by the id
         var entity = await context.Services.FindAsync(id);
 
+        // If the entity is null, it means that the entity was not found
         if (entity is null)
         {
-            return;
+            return false;
         }
+
+        // Remove the entity from the context
         context.Services.Remove(entity);
 
-        await context.SaveChangesAsync();
+        // Save the changes to the database
+        var deleted = await context.SaveChangesAsync();
+
+        // If the deleted is 0, it means that the entity was not deleted
+        if (deleted == 0)
+        {
+            return false;
+        }
+
+        return true;
     }
-
-
-
 }

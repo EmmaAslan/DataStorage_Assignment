@@ -6,7 +6,7 @@ namespace Data.Interfaces
     public interface IProjectManagerRepository
     {
         Task<ProjectManagerEntity> CreateAsync(ProjectManagerEntity entity);
-        Task DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id);
         Task<IEnumerable<ProjectManagerEntity>> GetAllAsync();
         Task<ProjectManagerEntity> GetByAnyAsync(Expression<Func<ProjectManagerEntity, bool>> expression);
         Task<ProjectManagerEntity> GetByIdAsync(int id);

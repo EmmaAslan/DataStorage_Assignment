@@ -17,10 +17,25 @@ public static class ServiceFactory
 
     public static ServiceModel CreateService(ServiceEntity entity)
     {
+        // Får null när jag skapar Project
+        if (entity == null)
+            return null!;
+
         return new ServiceModel
         {
+            Id = entity.Id,
             ServiceName = entity.ServiceName,
             Price = entity.Price
         };
     }
+
+     public static ServiceEntity CreateService(ServiceModel model)
+    {
+        return new ServiceEntity
+        {
+            Id = model.Id,
+            ServiceName = model.ServiceName,
+            Price = (int)model.Price
+        };
+    } 
 }

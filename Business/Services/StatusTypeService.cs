@@ -10,6 +10,10 @@ public class StatusTypeService(IStatusTypeRepository _repository) : IStatusTypeS
     public async Task<IEnumerable<StatusTypeModel>> GetAllAsync()
     {
         var statusEntities = await _repository.GetAllAsync();
+        if (statusEntities is null)
+        {
+            return null!;
+        }
         return statusEntities.Select(StatusTypeFactory.CreateStatusType).ToList();
     }
 }
