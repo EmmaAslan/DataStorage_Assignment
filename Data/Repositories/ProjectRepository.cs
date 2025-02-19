@@ -10,18 +10,6 @@ public class ProjectRepository(DataContext context) : IProjectRepository
 {
     public async Task<ProjectEntity?> CreateAsync(ProjectEntity entity)
     {
-        //await context.Projects.AddAsync(entity);
-        ////Denna funkar ej när jag sätter in id som inte finns...
-        //await context.SaveChangesAsync();
-
-        //return entity;
-        //return await context.Projects
-        //.Include(x => x.StatusType)
-        //.Include(x => x.Customer)
-        //.Include(x => x.ProjectManager)
-        //.Include(x => x.Service)
-        //.FirstOrDefaultAsync(x => x.Id == entity.Id!);
-
         try
         {
             await context.Projects.AddAsync(entity);
@@ -65,8 +53,6 @@ public class ProjectRepository(DataContext context) : IProjectRepository
 
     public async Task<ProjectEntity> GetByAnyAsync(Expression<Func<ProjectEntity, bool>> expression)
     {
-        // GetByNameAsync(x => x.ProjectName == "ProjectName");
-        // GetByNameAsync(x => x.ProjectManager == "ProjectManager");
         var entity = await context.Projects
             .Where(expression)
             .Include(x => x.StatusType)

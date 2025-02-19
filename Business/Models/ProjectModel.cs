@@ -13,10 +13,4 @@ public class ProjectModel
     public CustomerModel Customer { get; set; } = null!;
     public ServiceModel Service { get; set; } = null!;
     public StatusTypeModel StatusType { get; set; } = null!;
-
-
-    //public int? ProjectManagerId { get; set; }
-    //public int? CustomerId { get; set; }
-    //public int? ServiceId { get; set; }
-    //public int? StatusTypeId { get; set; }
 }

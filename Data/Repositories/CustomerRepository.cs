@@ -28,9 +28,6 @@ public class CustomerRepository(DataContext context) : ICustomerRepository
 
     public async Task<CustomerEntity> GetByAnyAsync(Expression<Func<CustomerEntity, bool>> expression)
     {
-        // GetByAnyAsync(x => x.CustomerName == "CustomerName");
-        // GetByAnyAsync(x => x.Email == "Email");
-        // GetByAnyAsync(x => x.Phone == "Phone");
         var entity = await context.Customers.FirstOrDefaultAsync(expression);
 
         return entity ?? null!;

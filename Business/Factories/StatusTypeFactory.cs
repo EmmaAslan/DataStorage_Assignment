@@ -8,7 +8,6 @@ public static class StatusTypeFactory
     
     public static StatusTypeModel CreateStatusType(StatusTypeEntity entity)
     {
-        // Får null när jag skapar Project
         if (entity == null)
             return null!;
 

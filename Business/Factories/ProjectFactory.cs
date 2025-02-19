@@ -6,7 +6,6 @@ namespace Business.Factories;
 
 public static class ProjectFactory
 {
-
     //Skapa en ny ProjectEntity
     public static ProjectEntity CreateProject(ProjectRegistrationForm dto)
     {
@@ -43,6 +42,7 @@ public static class ProjectFactory
         };
     }
 
+    //Skapa en ny ProjectEntity från en ProjectModel
     public static ProjectEntity CreateProject(ProjectModel model)
     {
         return new ProjectEntity

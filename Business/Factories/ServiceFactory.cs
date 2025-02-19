@@ -17,7 +17,6 @@ public static class ServiceFactory
 
     public static ServiceModel CreateService(ServiceEntity entity)
     {
-        // Får null när jag skapar Project
         if (entity == null)
             return null!;
 

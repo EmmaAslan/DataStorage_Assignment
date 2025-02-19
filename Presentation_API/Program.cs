@@ -8,6 +8,26 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add CORS configuration
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        builder =>
+        {
+            builder
+                .WithOrigins(
+                    "http://localhost:5173",  // Vite default
+                    "http://localhost:3000",  // React default
+                    "http://127.0.0.1:5173",
+                    "http://127.0.0.1:3000"
+                )
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+});
+
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -32,6 +52,8 @@ builder.Services.AddScoped<IStatusTypeService, StatusTypeService>();
 
 
 var app = builder.Build();
+
+app.UseCors("AllowReactApp");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

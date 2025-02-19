@@ -29,8 +29,6 @@ public class ProjectManagerRepository(DataContext context) : IProjectManagerRepo
 
     public async Task<ProjectManagerEntity> GetByAnyAsync(Expression<Func<ProjectManagerEntity, bool>> expression)
     {
-        // GetByNameAsync(x => x.FirstName == "FirstName");
-        // GetByNameAsync(x => x.LastName == "LastName");
         var entity = await context.ProjectManagers.FirstOrDefaultAsync(expression);
 
         return entity ?? null!;

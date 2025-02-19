@@ -28,9 +28,6 @@ public class ServiceRepository(DataContext context) : IServiceRepository
 
     public async Task<ServiceEntity> GetByAnyAsync(Expression<Func<ServiceEntity, bool>> expression)
     {
-        // GetByNameAsync(x => x.ServiceName == "ServiceName");
-        // GetByNameAsync(x => x.Price == "Price");
-
         var entity = await context.Services.FirstOrDefaultAsync(expression);
 
         return entity ?? null!;

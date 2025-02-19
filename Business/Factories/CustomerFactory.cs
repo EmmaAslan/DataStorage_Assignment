@@ -18,7 +18,6 @@ public static class CustomerFactory
 
     public static CustomerModel CreateCustomer(CustomerEntity entity)
     {
-        // Får null när jag skapar Project
         if (entity == null)
             return null!;
 

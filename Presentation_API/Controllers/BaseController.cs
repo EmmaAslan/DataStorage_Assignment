@@ -1,7 +1,6 @@
 ﻿using Business.Dtos;
 using Business.Interfaces;
 using Business.Models;
-using Business.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation_API.Controllers
@@ -189,7 +188,7 @@ namespace Presentation_API.Controllers
             return Ok(project);
         }
 
-        [HttpPut("project")]
+        [HttpPut("project/{id}")]
         public async Task<ActionResult<ProjectModel>> UpdateProject([FromBody] ProjectModel project)
         {
             if (project == null)

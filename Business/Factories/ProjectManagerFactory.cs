@@ -21,7 +21,6 @@ public static class ProjectManagerFactory
    
     public static ProjectManagerModel CreateProjectManager(ProjectManagerEntity entity)
     {
-        // Får null när jag skapar Project
         if (entity == null)
             return null!;
 
