@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
 using Data.Contexts;
 using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -16,27 +17,54 @@ public abstract class BaseRepository<TEntity>(DataContext context) : IBaseReposi
 
     public virtual async Task BeginTransactionAsync()
     {
-        _transaction ??= await _context.Database.BeginTransactionAsync();
+        try
+        {
+            // Begins a transaction if one does not already exist
+            _transaction ??= await _context.Database.BeginTransactionAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
     }
 
     public virtual async Task CommitTransactionAsync()
     {
-        if (_transaction != null)
+
+        try
         {
-            await _transaction.CommitAsync();
-            await _transaction.DisposeAsync();
-            _transaction = null!;
+            // Commits a transaction 
+            if (_transaction != null)
+            {
+                await _transaction.CommitAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null!;
+            }
         }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }   
     }
 
     public virtual async Task RollbackTransactionAsync()
     {
-        if (_transaction != null)
+        try
         {
-            await _transaction.RollbackAsync();
-            await _transaction.DisposeAsync();
-            _transaction = null!;
+            // Rolls back a transaction and disposes of it if it exists
+            if (_transaction != null)
+            {
+                await _transaction.RollbackAsync();
+                await _transaction.DisposeAsync();
+                _transaction = null!;
+            }
+        } 
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
         }
+
+        
     }
 
     #endregion
@@ -45,35 +73,86 @@ public abstract class BaseRepository<TEntity>(DataContext context) : IBaseReposi
 
     public virtual async Task AddAsync(TEntity entity)
     {
-        await _dbSet.AddAsync(entity);
+        try
+        {
+            // Adds an entity to the context
+            await _dbSet.AddAsync(entity);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
     }
 
     public virtual async Task<IEnumerable<TEntity>> GetAsync()
     {
-        var entities = await _dbSet.ToListAsync();
-        return entities;
+        try
+        {
+            // Returns a list of entities
+            var entities = await _dbSet.ToListAsync();
+            return entities;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return [];
+        } 
     }
 
     public virtual async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> expression)
     {
-        var entity = await _dbSet.FirstOrDefaultAsync(expression);
-        return entity;
+        try
+        {
+            // Returns a single entity based on the expression
+            var entity = await _dbSet.FirstOrDefaultAsync(expression);
+            return entity;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return null;
+        }
     }
 
     public virtual void Update(TEntity entity)
     {
-        _dbSet.Update(entity);
-
+        try
+        {
+            // Updates an entity in the context
+            _dbSet.Update(entity);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
     }
 
     public virtual void Remove(TEntity entity)
     {
-        _dbSet.Remove(entity);
+        try
+        {
+            // Removes an entity from the context
+            _dbSet.Remove(entity);
+
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
     }
 
     public virtual async Task<int> SaveAsync()
     {
-        return await _context.SaveChangesAsync();
+        try
+        {
+            // Saves changes to the context
+            return await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return 0;
+        }
     }
 
     #endregion

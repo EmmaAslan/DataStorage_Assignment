@@ -1,15 +1,17 @@
-﻿using Business.Dtos;
+﻿using System.Linq.Expressions;
+using Business.Dtos;
 using Business.Models;
 using Data.Entities;
 
-namespace Business.Interfaces;
-
-public interface ICustomerService
+namespace Business.Interfaces
 {
-    Task<CustomerModel> CreateAsync(CustomerRegistrationForm dto);
-    Task<IEnumerable<CustomerModel>> GetAllAsync();
-    Task<CustomerModel> GetByIdAsync(int id);
-    Task<CustomerModel> UpdateAsync(CustomerModel model);
-    Task<bool> DeleteAsync(int id);
+    public interface ICustomerService
+    {
+        Task CreateAsync(CustomerRegistrationForm dto);
+        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<CustomerModel>> GetAllAsync();
+        Task<CustomerModel> GetByAnyAsync(Expression<Func<CustomerEntity, bool>> expression);
+        Task<CustomerModel> GetByIdAsync(int id);
+        Task<CustomerModel> UpdateAsync(CustomerModel model);
+    }
 }
-

@@ -7,11 +7,11 @@ namespace Business.Interfaces
 {
     public interface IServiceService
     {
-        Task<ServiceModel> CreateAsync(ServiceRegistrationForm dto);
+        Task CreateAsync(ServiceRegistrationForm dto);
+        Task<bool> DeleteAsync(int id);
         Task<IEnumerable<ServiceModel>> GetAllAsync();
         Task<ServiceModel> GetByAnyAsync(Expression<Func<ServiceEntity, bool>> expression);
         Task<ServiceModel> GetByIdAsync(int id);
         Task<ServiceModel> UpdateAsync(ServiceModel model);
-        Task<bool> DeleteAsync(int id);
     }
 }

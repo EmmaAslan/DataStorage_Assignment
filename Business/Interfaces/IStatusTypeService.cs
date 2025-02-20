@@ -1,8 +1,9 @@
 ﻿using Business.Models;
 
-namespace Business.Interfaces;
-
-public interface IStatusTypeService
+namespace Business.Interfaces
 {
-    Task<IEnumerable<StatusTypeModel>> GetAllAsync();
+    public interface IStatusTypeService
+    {
+        Task<IEnumerable<StatusTypeModel>> GetAllAsync();
+    }
 }

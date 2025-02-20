@@ -9,7 +9,7 @@ public class StatusTypeService(IStatusTypeRepository _repository) : IStatusTypeS
 {
     public async Task<IEnumerable<StatusTypeModel>> GetAllAsync()
     {
-        var statusEntities = await _repository.GetAllAsync();
+        var statusEntities = await _repository.GetAsync();
         if (statusEntities is null)
         {
             return null!;

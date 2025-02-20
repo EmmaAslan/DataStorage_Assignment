@@ -8,19 +8,32 @@ using Data.Interfaces;
 
 namespace Business.Services;
 
-public class ProjectManagerService(IProjectManagerRepository repository) : IProjectManagerService
+public class ProjectManagerService(IProjectManagerRepository _repository) : IProjectManagerService
 {
-    private readonly IProjectManagerRepository _repository = repository;
-
-    public async Task<ProjectManagerModel> CreateAsync(ProjectManagerRegistrationForm dto)
+    public async Task CreateAsync(ProjectManagerRegistrationForm dto)
     {
-        var projectManagerEntity = ProjectManagerFactory.CreateProjectManager(dto);
-        var createdProjectManagerEntity = await _repository.CreateAsync(projectManagerEntity);
-        return ProjectManagerFactory.CreateProjectManager(createdProjectManagerEntity);
+        await _repository.BeginTransactionAsync();
+
+        try
+        {
+            var projectManagerEntity = ProjectManagerFactory.CreateProjectManager(dto);
+            await _repository.AddAsync(projectManagerEntity);
+            var result = await _repository.SaveAsync();
+            if (result == 0)
+            {
+                await _repository.RollbackTransactionAsync();
+            }
+            await _repository.CommitTransactionAsync();
+        }
+        catch
+        {
+            await _repository.RollbackTransactionAsync();
+        }
     }
+
     public async Task<IEnumerable<ProjectManagerModel>> GetAllAsync()
     {
-        var projectManagerEntities = await _repository.GetAllAsync();
+        var projectManagerEntities = await _repository.GetAsync();
         if (projectManagerEntities is null)
         {
             return null!;
@@ -28,44 +41,83 @@ public class ProjectManagerService(IProjectManagerRepository repository) : IProj
 
         return projectManagerEntities.Select(ProjectManagerFactory.CreateProjectManager);
     }
+
     public async Task<ProjectManagerModel> GetByIdAsync(int id)
     {
-        var projectManagerEntity = await _repository.GetByIdAsync(id);
+        var projectManagerEntity = await _repository.GetAsync(i => i.Id == id);
         if (projectManagerEntity is null)
         {
             return null!;
         }
         return ProjectManagerFactory.CreateProjectManager(projectManagerEntity);
     }
+
     public async Task<ProjectManagerModel> GetByAnyAsync(Expression<Func<ProjectManagerEntity, bool>> expression)
     {
-        var projectManagerEntity = await _repository.GetByAnyAsync(expression);
+        var projectManagerEntity = await _repository.GetAsync(expression);
         if (projectManagerEntity is null)
         {
             return null!;
         }
         return ProjectManagerFactory.CreateProjectManager(projectManagerEntity);
     }
+
     public async Task<ProjectManagerModel> UpdateAsync(ProjectManagerModel model)
     {
-        // Create a new ProjectManagerEntity from the ProjectManagerModel
-        var entity = ProjectManagerFactory.CreateProjectManager(model);
+        await _repository.BeginTransactionAsync();
 
-        // Update the entity in the database
-        var updatedProjectManagerEntity = await _repository.UpdateAsync(entity);
-        if (updatedProjectManagerEntity is null)
+        try
+        {
+            var entity = ProjectManagerFactory.CreateProjectManager(model);
+            _repository.Update(entity);
+
+            var result = await _repository.SaveAsync();
+            if (result == 0)
+            {
+                await _repository.RollbackTransactionAsync();
+                return null!;
+            }
+            await _repository.CommitTransactionAsync();
+        }
+        catch
+        {
+            await _repository.RollbackTransactionAsync();
+        }
+
+        var x = await _repository.GetAsync(i => i.Id == model.Id);
+        if (x is null)
         {
             return null!;
         }
-        // Create a new ProjectManagerModel from the updated ProjectManagerEntity
-        var updatedProjectManagerModel = ProjectManagerFactory.CreateProjectManager(updatedProjectManagerEntity);
-        
-        return updatedProjectManagerModel;
+        return ProjectManagerFactory.CreateProjectManager(x);
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var result = await _repository.DeleteAsync(id);
-        return result;
+        await _repository.BeginTransactionAsync();
+
+        try
+        {
+            var entity = await _repository.GetAsync(i => i.Id == id);
+            if (entity is null)
+            {
+                await _repository.RollbackTransactionAsync();
+                return false;
+            }
+            _repository.Remove(entity);
+            var result = await _repository.SaveAsync();
+            if (result == 0)
+            {
+                await _repository.RollbackTransactionAsync();
+                return false;
+            }
+            await _repository.CommitTransactionAsync();
+            return true;
+        }
+        catch
+        {
+            await _repository.RollbackTransactionAsync();
+            return false;
+        }
     }
 }

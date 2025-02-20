@@ -10,15 +10,29 @@ namespace Business.Services;
 
 public class ServiceService(IServiceRepository _repository) : IServiceService
 {
-    public async Task<ServiceModel> CreateAsync(ServiceRegistrationForm dto)
+    public async Task CreateAsync(ServiceRegistrationForm dto)
     {
-        var serviceEntity = ServiceFactory.CreateService(dto);
-        var createdServiceEntity = await _repository.CreateAsync(serviceEntity);
-        return ServiceFactory.CreateService(createdServiceEntity);
+        await _repository.BeginTransactionAsync();
+
+        try
+        {
+            var serviceEntity = ServiceFactory.CreateService(dto);
+            await _repository.AddAsync(serviceEntity);
+            var result = await _repository.SaveAsync();
+            if (result == 0)
+            {
+                await _repository.RollbackTransactionAsync();
+            }
+            await _repository.CommitTransactionAsync();
+        }
+        catch
+        {
+            await _repository.RollbackTransactionAsync();
+        }
     }
     public async Task<IEnumerable<ServiceModel>> GetAllAsync()
     {
-        var serviceEntities = await _repository.GetAllAsync();
+        var serviceEntities = await _repository.GetAsync();
         if (serviceEntities is null)
         {
             return null!;
@@ -27,7 +41,7 @@ public class ServiceService(IServiceRepository _repository) : IServiceService
     }
     public async Task<ServiceModel> GetByIdAsync(int id)
     {
-        var serviceEntity = await _repository.GetByIdAsync(id);
+        var serviceEntity = await _repository.GetAsync(i => i.Id == id);
         if (serviceEntity is null)
         {
             return null!;
@@ -36,7 +50,7 @@ public class ServiceService(IServiceRepository _repository) : IServiceService
     }
     public async Task<ServiceModel> GetByAnyAsync(Expression<Func<ServiceEntity, bool>> expression)
     {
-        var serviceEntity = await _repository.GetByAnyAsync(expression);
+        var serviceEntity = await _repository.GetAsync(expression);
         if (serviceEntity is null)
         {
             return null!;
@@ -45,25 +59,60 @@ public class ServiceService(IServiceRepository _repository) : IServiceService
     }
     public async Task<ServiceModel> UpdateAsync(ServiceModel model)
     {
-        // Create a new ServiceEntity from the ServiceModel
-        var entity = ServiceFactory.CreateService(model);
+        await _repository.BeginTransactionAsync();
 
-        // Update the entity in the database
-        var updatedServiceEntity = await _repository.UpdateAsync(entity);
-        if (updatedServiceEntity is null)
+        try
         {
-            return null!;
+            var entity = ServiceFactory.CreateService(model);
+            _repository.Update(entity);
+
+            var result = await _repository.SaveAsync();
+            if (result == 0)
+            {
+                await _repository.RollbackTransactionAsync();
+                return null!;
+            }
+            await _repository.CommitTransactionAsync();
+        }
+        catch
+        {
+            await _repository.RollbackTransactionAsync();
         }
 
-        // Create a new ServiceModel from the updated ServiceEntity
-        var updatedServiceModel = ServiceFactory.CreateService(updatedServiceEntity);
-        
-        return updatedServiceModel;
+        var x = await _repository.GetAsync(i => i.Id == model.Id);
+        if (x is null)
+            return null!;
+
+        return ServiceFactory.CreateService(x);
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var result = await _repository.DeleteAsync(id);
-        return result;
+        await _repository.BeginTransactionAsync();
+
+        try
+        {
+            var entity = await _repository.GetAsync(i => i.Id == id);
+            if (entity is null)
+            {
+                await _repository.RollbackTransactionAsync();
+                return false;
+            }
+
+            _repository.Remove(entity);
+            var result = await _repository.SaveAsync();
+            if (result == 0)
+            {
+                await _repository.RollbackTransactionAsync();
+                return false;
+            }
+            await _repository.CommitTransactionAsync();
+            return true;
+        }
+        catch
+        {
+            await _repository.RollbackTransactionAsync();
+            return false;
+        }
     }
 }
