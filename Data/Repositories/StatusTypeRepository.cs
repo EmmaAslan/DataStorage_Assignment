@@ -5,6 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories;
 
+public class StatusTypeRepository(DataContext context) : BaseRepository<StatusTypeEntity>(context), IStatusTypeRepository
+{
+  
+}
+
+    /*
 public class StatusTypeRepository(DataContext context) : IStatusTypeRepository
 {
     public async Task<IEnumerable<StatusTypeEntity>> GetAllAsync()
@@ -12,3 +18,4 @@ public class StatusTypeRepository(DataContext context) : IStatusTypeRepository
         return await context.StatusTypes.ToListAsync();
     }
 }
+*/

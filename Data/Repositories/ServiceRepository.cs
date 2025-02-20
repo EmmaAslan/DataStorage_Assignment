@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories;
 
+public class ServiceRepository(DataContext context) : BaseRepository<ServiceEntity>(context), IServiceRepository
+{
+}
+
+/*
 public class ServiceRepository(DataContext context) : IServiceRepository
 {
     public async Task<ServiceEntity> CreateAsync(ServiceEntity entity)
@@ -67,3 +72,5 @@ public class ServiceRepository(DataContext context) : IServiceRepository
         return true;
     }
 }
+
+*/

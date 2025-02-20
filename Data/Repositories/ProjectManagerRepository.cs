@@ -6,6 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories;
 
+
+public class ProjectManagerRepository(DataContext context) : BaseRepository<ProjectManagerEntity>(context), IProjectManagerRepository
+{
+}
+
+/*
 public class ProjectManagerRepository(DataContext context) : IProjectManagerRepository
 {
     public async Task<ProjectManagerEntity> CreateAsync(ProjectManagerEntity entity)
@@ -66,10 +72,5 @@ public class ProjectManagerRepository(DataContext context) : IProjectManagerRepo
 
         return true;
     }
-
-
-
-
-
-
 }
+*/
